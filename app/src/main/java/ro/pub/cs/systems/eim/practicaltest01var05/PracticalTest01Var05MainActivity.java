@@ -3,11 +3,17 @@ package ro.pub.cs.systems.eim.practicaltest01var05;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Intent;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PracticalTest01Var05MainActivity extends AppCompatActivity {
         private EditText editText;
@@ -18,6 +24,7 @@ public class PracticalTest01Var05MainActivity extends AppCompatActivity {
         private Button buttonCenter;
         private Button buttonNextActivity;
         private int buttonPressCount = 0;
+        private int PRAG=5;
         private static final String PRESS_COUNT_KEY = "buttonPressCount";
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +101,19 @@ public class PracticalTest01Var05MainActivity extends AppCompatActivity {
                 buttonPressCount = savedInstanceState.getInt(PRESS_COUNT_KEY, 0);
                 Toast.makeText(this, "Număr apăsări butoane: " + buttonPressCount, Toast.LENGTH_SHORT).show();
             }
+            // În metoda onCreate() din PracticalTest01Var05MainActivity
+            Intent serviceIntent = new Intent(this, PracticalTest01Var05Service.class);
+            String editTextContent = editText.getText().toString();
+
+            ArrayList<String> template = new ArrayList<>();
+
+            if (!editTextContent.isEmpty()) {
+                String[] elements = editTextContent.split(", "); // Separă cuvintele prin virgulă și spațiu
+                template.addAll(Arrays.asList(elements));
+            }
+            if(template.size()>PRAG)
+            {serviceIntent.putStringArrayListExtra("template", template);
+            startService(serviceIntent);}
         }
 
         private void addTextToEditText(String text) {
